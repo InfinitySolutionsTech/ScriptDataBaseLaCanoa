@@ -45,15 +45,7 @@ VALUES
     ('Tarjeta');
    
    
-   -- Create the reports table
-CREATE TABLE lacanoa.reports (
-    id SERIAL PRIMARY KEY,
-    report_name VARCHAR(100) NOT NULL,
-    report_type VARCHAR(50) NOT NULL,
-    is_active BOOLEAN DEFAULT true,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+
 
 
 
