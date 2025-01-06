@@ -95,6 +95,7 @@ CREATE TABLE lacanoa.order_details (
     product_id BIGINT NOT NULL,
     quantity INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
+    Consumption_type BOOLEAN DEFAULT FALSE,
     
     CONSTRAINT fk_detail_order FOREIGN KEY (order_id) 
         REFERENCES orders(id),
