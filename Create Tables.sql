@@ -1,8 +1,10 @@
+create schema lacanoa
+
 -- Version 3
 
 -- SQL Schema
 -- Create Catalogs table (possible roles)
-CREATE TABLE lacanoa.Catalogs (
+CREATE TABLE lacanoa.catalogs (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     role VARCHAR(50) NOT NULL UNIQUE
 );
@@ -10,15 +12,14 @@ CREATE TABLE lacanoa.Catalogs (
 
 
 -- Create IdentificationType table
-CREATE TABLE lacanoa.IdentificationType (
+CREATE TABLE lacanoa.identificationType (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
 
 
--- Create Users table
-CREATE TABLE lacanoa.Users (
+CREATE TABLE lacanoa.users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     identification_type_id BIGINT NOT NULL,
     identification VARCHAR(50) UNIQUE NOT NULL,
@@ -28,15 +29,16 @@ CREATE TABLE lacanoa.Users (
     password VARCHAR(255) NOT NULL,
     birth_date DATE,
     phone VARCHAR(20),
+    address VARCHAR(255),
+    age INT,
     role_id BIGINT NOT NULL,
     created_by BIGINT,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME,
-    
-    -- Foreign keys
-    CONSTRAINT fk_user_identification_type FOREIGN KEY (identification_type_id) REFERENCES IdentificationType(id),
-    CONSTRAINT fk_user_role FOREIGN KEY (role_id) REFERENCES Catalogs(id),
-    CONSTRAINT fk_user_created_by FOREIGN KEY (created_by) REFERENCES Users(id)
+
+    CONSTRAINT fk_user_identification_type FOREIGN KEY (identification_type_id) REFERENCES identificationType(id),
+    CONSTRAINT fk_user_role FOREIGN KEY (role_id) REFERENCES catalogs(id),
+    CONSTRAINT fk_user_created_by FOREIGN KEY (created_by) REFERENCES users(id)
 );
 
 

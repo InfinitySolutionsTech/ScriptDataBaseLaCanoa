@@ -1,12 +1,12 @@
 
 
 -- Insert default values
-INSERT INTO lacanoa.IdentificationType (name) VALUES
+INSERT INTO lacanoa.identificationType (name) VALUES
 ('CC'),           -- Citizen ID
 ('Pasaporte'),     -- International Travel Document
 ('CE');       -- Tax ID Number
 -- Insert possible roles into Catalogs table
-INSERT INTO lacanoa.Catalogs (role) VALUES ('administrador'), ('mesero'), ('cajero'), ('superadmin');
+INSERT INTO lacanoa.catalogs (role) VALUES ('administrador'), ('mesero'), ('cajero'), ('superadmin');
 
 -- 2. Insertar registros en TipoProducto
 INSERT INTO lacanoa.product_type (name) 
@@ -55,4 +55,15 @@ INSERT INTO lacanoa.reports (report_name, report_type, is_active) VALUES
     ('Reporte Facturación Electrónica', 'CSV', true),
     ('Reporte General', 'PDF', true),
     ('Reporte Facturación Electrónica', 'PDF', true);
+   
+   
+-- Insert Users 
+   INSERT INTO lacanoa.users (identification_type_id,identification,first_name,last_name,email,password,birth_date,phone,address,age,role_id,created_by,created_at,updated_at) VALUES
+	 (2,'2345235','Jonh','Nino','jonh.nino@example.com','dsf234','1993-01-04','123123','cll23',21,1,NULL,'2025-01-06 14:59:29',NULL);
+	
+	INSERT INTO lacanoa.users (identification_type_id,identification,first_name,last_name,email,password,birth_date,phone,address,age,role_id,created_by,created_at,updated_at) VALUES
+	 (2,'23452535','Jonh34','Nino','jonh34.nino@example.com','dsf234','1993-01-04','123123','cll23',21,1,2,'2025-01-06 14:59:29',NULL);
+
+
+
 
