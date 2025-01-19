@@ -66,4 +66,36 @@ INSERT INTO lacanoa.reports (report_name, report_type, is_active) VALUES
 
 
 
+--- suppliers
+INSERT INTO lacanoa.supplierCategories (Name, Description) VALUES
+('Alimentos', 'Proveedores de productos alimenticios para restaurantes y bares.'),
+('Bebidas', 'Proveedores de bebidas, incluyendo opciones alcohólicas y no alcohólicas.'),
+('Utensilios', 'Proveedores de utensilios de cocina y accesorios para restaurantes.');
 
+
+INSERT INTO lacanoa.suppliers (
+    Name, Contact, Phone, Email, Address, City, State, PostalCode, Country, 
+    CategoryID, IdentificationTypeID, DocumentNumber, CreatedBy
+) VALUES (
+    'Distribuidora El Buen Sabor', 'Juan Pérez', '+52-555-123-4567', 
+    'contacto@buen-sabor.com', 'Calle Principal #123', 'Ciudad de México', 
+    'CDMX', '01000', 'Mexico', 
+    1, -- Categoría: Food
+    1, -- Tipo de documento: RFC
+    'RFC123456789',
+    2
+);
+
+-- data Clients 
+INSERT INTO lacanoa.personTypes (Name) VALUES
+('Natural'),
+('Juridical');
+
+INSERT INTO lacanoa.clients (
+    FirstName, LastName, IdentificationTypeID, DocumentNumber, VerificationDigit, 
+    Address, City, Email, Phone, PersonTypeID, IsTaxWithholder, CreatedBy
+) VALUES
+-- Cliente creado por el usuario con ID 1
+('Jane', 'Smith', 1, '234567890', NULL, 
+ '456 Elm St, Springfield', 'Sogamoso' 'jane.smith@example.com', '+1-555-678-9101', 
+ 2, FALSE, 2);
