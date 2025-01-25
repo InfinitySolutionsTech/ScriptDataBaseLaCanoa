@@ -56,13 +56,13 @@ CREATE TABLE lacanoa.product (
     type_id BIGINT NOT NULL,
     value DECIMAL(10, 2) NOT NULL,
     description VARCHAR(255) NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
     creation_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     update_date DATETIME,
     
     CONSTRAINT fk_product_type FOREIGN KEY (type_id) 
         REFERENCES product_type(id)
 );
-
 -- Create Tables table (restaurant tables)
 CREATE TABLE lacanoa.tables (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -142,7 +142,7 @@ CREATE TABLE lacanoa.reports (
 
 
 
---- informacion para crear proovedores 
+-- informacion para crear proovedores 
 CREATE TABLE lacanoa.supplierCategories (
     CategoryID INT AUTO_INCREMENT PRIMARY KEY, -- Identificador único de la categoría
     Name VARCHAR(100) NOT NULL UNIQUE,         -- Nombre de la categoría
@@ -167,7 +167,7 @@ CREATE TABLE lacanoa.suppliers (
     RegistrationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Fecha de registro
     LastUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Fecha de última actualización
     IsActive BOOLEAN DEFAULT TRUE,             -- Estado activo/inactivo
-    FOREIGN KEY (CategoryID) REFERENCES SupplierCategories(CategoryID), -- Relación con SupplierCategories
+    FOREIGN KEY (CategoryID) REFERENCES supplierCategories(CategoryID), -- Relación con SupplierCategories
     FOREIGN KEY (IdentificationTypeID) REFERENCES identificationType(id), -- Relación con identificationType
     FOREIGN KEY (CreatedBy) REFERENCES lacanoa.users(id) -- Relationship with lacanoa.users
 
@@ -198,6 +198,6 @@ CREATE TABLE lacanoa.clients (
     RegistrationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Registration date
     LastUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Last updated date
     FOREIGN KEY (IdentificationTypeID) REFERENCES lacanoa.identificationType(id), -- Relationship with IdentificationType
-    FOREIGN KEY (PersonTypeID) REFERENCES PersonTypes(PersonTypeID), -- Relationship with PersonTypes
+    FOREIGN KEY (PersonTypeID) REFERENCES lacanoa.personTypes(PersonTypeID), -- Relationship with PersonTypes
     FOREIGN KEY (CreatedBy) REFERENCES lacanoa.users(id) -- Relationship with lacanoa.users
 );
