@@ -1,13 +1,12 @@
-
-
 -- Insert default values
 INSERT INTO lacanoa.identificationType (name) VALUES
 ('CC'),           -- Citizen ID
 ('Pasaporte'),     -- International Travel Document
-('CE');       -- Tax ID Number
+('CE'),
+('RUT'),
+('NIT');       -- Tax ID Number
 -- Insert possible roles into Catalogs table
 INSERT INTO lacanoa.catalogs (role) VALUES ('administrador'), ('mesero'), ('cajero'), ('superadmin');
-
 -- 2. Insertar registros en TipoProducto
 INSERT INTO lacanoa.product_type (name) 
 VALUES 
@@ -17,9 +16,6 @@ VALUES
     ('Bebidas'),
     ('Vinos'),
     ('Cremas');
-
-
-
 -- Insertar los registros de las mesas
 INSERT INTO lacanoa.tables (name) 
 VALUES 
@@ -30,9 +26,6 @@ VALUES
     ('S21'), ('S22'), ('S23'), ('S24'), ('S25'),
     ('K1'), ('K2'), ('K3'), ('K4'), ('K5'),
     ('T1'), ('T2'), ('T3'), ('T4'), ('T5');
-   
-
-
 -- 2. Insertar los registros en orden alfabético
 INSERT INTO lacanoa.payment_method (name) 
 VALUES
@@ -43,59 +36,21 @@ VALUES
     ('QR Bancolombia'),
     ('QR Davivienda'),
     ('Tarjeta');
-   
-   
-
-
-
-
 -- Insert the report types
 INSERT INTO lacanoa.reports (report_name, report_type, is_active) VALUES
     ('Reporte General', 'CSV', true),
     ('Reporte Facturación Electrónica', 'CSV', true),
     ('Reporte General', 'PDF', true),
     ('Reporte Facturación Electrónica', 'PDF', true);
-   
-   
--- Insert Users 
-   INSERT INTO lacanoa.users (identification_type_id,identification,first_name,last_name,email,password,birth_date,phone,address,age,role_id,created_by,created_at,updated_at) VALUES
-	 (2,'2345235','Jonh','Nino','jonh.nino@example.com','dsf234','1993-01-04','123123','cll23',21,1,NULL,'2025-01-06 14:59:29',NULL);
-	
-	INSERT INTO lacanoa.users (identification_type_id,identification,first_name,last_name,email,password,birth_date,phone,address,age,role_id,created_by,created_at,updated_at) VALUES
-	 (2,'23452535','Jonh34','Nino','jonh34.nino@example.com','dsf234','1993-01-04','123123','cll23',21,1,2,'2025-01-06 14:59:29',NULL);
-
-
-
---- suppliers
-INSERT INTO lacanoa.supplierCategories (Name, Description) VALUES
-('Alimentos', 'Proveedores de productos alimenticios para restaurantes y bares.'),
-('Bebidas', 'Proveedores de bebidas, incluyendo opciones alcohólicas y no alcohólicas.'),
-('Utensilios', 'Proveedores de utensilios de cocina y accesorios para restaurantes.');
-
-
-INSERT INTO lacanoa.suppliers (
-    Name, Contact, Phone, Email, Address, City, State, PostalCode, Country, 
-    CategoryID, IdentificationTypeID, DocumentNumber, CreatedBy
-) VALUES (
-    'Distribuidora El Buen Sabor', 'Juan Pérez', '+52-555-123-4567', 
-    'contacto@buen-sabor.com', 'Calle Principal #123', 'Ciudad de México', 
-    'CDMX', '01000', 'Mexico', 
-    1, -- Categoría: Food
-    1, -- Tipo de documento: RFC
-    'RFC123456789',
-    2
-);
-
 -- data Clients 
 INSERT INTO lacanoa.personTypes (Name) VALUES
 ('Natural'),
 ('Juridical');
-
-INSERT INTO lacanoa.clients (
-    FirstName, LastName, IdentificationTypeID, DocumentNumber, VerificationDigit, 
-    Address, City, Email, Phone, PersonTypeID, IsTaxWithholder, CreatedBy
-) VALUES
--- Cliente creado por el usuario con ID 1
-('Jane', 'Smith', 1, '234567890', NULL, 
- '456 Elm St, Springfield', 'Sogamoso' 'jane.smith@example.com', '+1-555-678-9101', 
- 2, FALSE, 2);
+-- suppliers
+INSERT INTO lacanoa.supplierCategories (Name, Description) VALUES
+('Alimentos', 'Proveedores de productos alimenticios para restaurantes y bares.'),
+('Bebidas', 'Proveedores de bebidas, incluyendo opciones alcohólicas y no alcohólicas.'),
+('Utensilios', 'Proveedores de utensilios de cocina y accesorios para restaurantes.');
+--
+insert into lacanoa.users(identification_type_id,identification, first_name, last_name, email, password, birth_date, phone, address, age, role_id, is_active, created_by, created_at, updated_at)
+values(1,1057597,'Jonh','Nino','jonh.nino@example.com','dsf234',current_timestamp,'3112251244','address',29,1,true,null,current_timestamp,null);

@@ -1,24 +1,15 @@
-create schema lacanoa
-
--- Version 3
-
 -- SQL Schema
+CREATE SCHEMA lacanoa;
 -- Create Catalogs table (possible roles)
 CREATE TABLE lacanoa.catalogs (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     role VARCHAR(50) NOT NULL UNIQUE
 );
-
-
-
 -- Create IdentificationType table
 CREATE TABLE lacanoa.identificationType (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
-
-
-
 CREATE TABLE lacanoa.users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     identification_type_id BIGINT NOT NULL,
@@ -32,6 +23,7 @@ CREATE TABLE lacanoa.users (
     address VARCHAR(255),
     age INT,
     role_id BIGINT NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
     created_by BIGINT,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME,
@@ -40,15 +32,11 @@ CREATE TABLE lacanoa.users (
     CONSTRAINT fk_user_role FOREIGN KEY (role_id) REFERENCES catalogs(id),
     CONSTRAINT fk_user_created_by FOREIGN KEY (created_by) REFERENCES users(id)
 );
-
-
-
 -- Create ProductType table
 CREATE TABLE lacanoa.product_type (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
-
 -- Create Product table
 CREATE TABLE lacanoa.product (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -68,19 +56,17 @@ CREATE TABLE lacanoa.tables (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL
 );
-
 -- Create PaymentMethod table
 CREATE TABLE lacanoa.payment_method (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL
 );
-
 -- Create Orders table
 CREATE TABLE lacanoa.orders (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     table_id BIGINT NOT NULL,
-    time DATETIME NOT NULL,
+    paid BOOLEAN NOT NULL DEFAULT false,
     creation_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     update_date DATETIME,
     
@@ -89,14 +75,12 @@ CREATE TABLE lacanoa.orders (
     CONSTRAINT fk_order_table FOREIGN KEY (table_id) 
         REFERENCES tables(id)
 );
-
 -- Create OrderDetails table
 CREATE TABLE lacanoa.order_details (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     order_id BIGINT NOT NULL,
     product_id BIGINT NOT NULL,
-    quantity INT NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
+    observations VARCHAR(100),
     Consumption_type BOOLEAN DEFAULT FALSE,
     
     CONSTRAINT fk_detail_order FOREIGN KEY (order_id) 
@@ -104,11 +88,74 @@ CREATE TABLE lacanoa.order_details (
     CONSTRAINT fk_detail_product FOREIGN KEY (product_id) 
         REFERENCES product(id)
 );
+ -- Create the reports table
+CREATE TABLE lacanoa.reports (
+    id SERIAL PRIMARY KEY,
+    report_name VARCHAR(100) NOT NULL,
+    report_type VARCHAR(50) NOT NULL,
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+-- informacion para crear proovedores 
+CREATE TABLE lacanoa.supplierCategories (
+    categoryID INT AUTO_INCREMENT PRIMARY KEY, -- Identificador único de la categoría
+    name VARCHAR(100) NOT NULL UNIQUE,         -- Nombre de la categoría
+    description TEXT                           -- Descripción opcional de la categoría
+);
+CREATE TABLE lacanoa.suppliers (
+    supplierID BIGINT AUTO_INCREMENT PRIMARY KEY, -- Identificador único del proveedor
+    name VARCHAR(255) NOT NULL,                -- Nombre del proveedor o empresa
+    contact VARCHAR(255),                      -- Nombre de la persona de contacto
+    phone VARCHAR(20),                         -- Número de teléfono
+    email VARCHAR(255),                        -- Dirección de correo electrónico
+    address TEXT,                              -- Dirección física
+    city VARCHAR(100),                         -- Ciudad
+    state VARCHAR(100),                        -- Estado o provincia
+    postalCode VARCHAR(20),                    -- Código postal
+    country VARCHAR(100) DEFAULT 'Mexico',     -- País (por defecto, México)
+    categoryID INT NOT NULL,                   -- Categoría del proveedor (FK de SupplierCategories)
+    identificationTypeID BIGINT NOT NULL,      -- Tipo de documento (FK de identificationType)
+    documentNumber VARCHAR(50) NOT NULL,       -- Número de documento del proveedor
+    createdBy BIGINT ,                         -- User who created the client (FK to lacanoa.users)
+    registrationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Fecha de registro
+    lastUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Fecha de última actualización
+    isActive BOOLEAN DEFAULT TRUE,             -- Estado activo/inactivo
+    FOREIGN KEY (categoryID) REFERENCES supplierCategories(categoryID), -- Relación con SupplierCategories
+    FOREIGN KEY (identificationTypeID) REFERENCES identificationType(id), -- Relación con identificationType
+    FOREIGN KEY (createdBy) REFERENCES lacanoa.users(id) -- Relationship with lacanoa.users
 
+);
+-- Clientes 
+CREATE TABLE lacanoa.personTypes (
+    personTypeID INT AUTO_INCREMENT PRIMARY KEY, -- Identificador único del tipo de persona
+    name VARCHAR(50) NOT NULL UNIQUE            -- Nombre del tipo de persona (Natural o Juridical)
+);
+CREATE TABLE lacanoa.clients (
+   	clientID INT AUTO_INCREMENT PRIMARY KEY,           -- Unique identifier for the client
+    firstName VARCHAR(100),                            -- Client's first name
+    lastName VARCHAR(100),                             -- Client's last name
+    identificationTypeID BIGINT NOT NULL,              -- Foreign key to IdentificationType table
+    documentNumber VARCHAR(50) NOT NULL UNIQUE,        -- Document number
+    verificationDigit CHAR(1),                         -- Verification digit for the document
+    address TEXT,                                      -- Client's address
+    city VARCHAR(100),                         		   -- Ciudad 
+    email VARCHAR(255),                                -- Client's email address
+    phone VARCHAR(20),                                 -- Client's phone number
+    personTypeID INT NOT NULL,                         -- Foreign key to PersonTypes table
+    isTaxWithholder BOOLEAN DEFAULT FALSE,             -- Indicates if the client is a tax withholder
+    createdBy BIGINT ,                         -- User who created the client (FK to lacanoa.users)
+    registrationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Registration date
+    lastUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Last updated date
+    FOREIGN KEY (identificationTypeID) REFERENCES lacanoa.identificationType(id), -- Relationship with IdentificationType
+    FOREIGN KEY (personTypeID) REFERENCES lacanoa.personTypes(PersonTypeID), -- Relationship with PersonTypes
+    FOREIGN KEY (createdBy) REFERENCES lacanoa.users(id) -- Relationship with lacanoa.users
+);
 -- Create Invoice table
 CREATE TABLE lacanoa.invoice (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     order_id BIGINT NOT NULL,
+    client_id INT,
     total DECIMAL(10, 2) NOT NULL,
     amount_delivered DECIMAL(10, 2) NOT NULL,
     changes DECIMAL(10, 2) NOT NULL,
@@ -122,82 +169,7 @@ CREATE TABLE lacanoa.invoice (
     electronic_invoice BOOLEAN NOT NULL DEFAULT FALSE,
     payment_method_id BIGINT NOT NULL,
     
-    CONSTRAINT fk_invoice_order FOREIGN KEY (order_id) 
-        REFERENCES orders(id),
-    CONSTRAINT fk_invoice_payment_method FOREIGN KEY (payment_method_id) 
-        REFERENCES payment_method(id)
-);
-
-
-   -- Create the reports table
-CREATE TABLE lacanoa.reports (
-    id SERIAL PRIMARY KEY,
-    report_name VARCHAR(100) NOT NULL,
-    report_type VARCHAR(50) NOT NULL,
-    is_active BOOLEAN DEFAULT true,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-
-
-
--- informacion para crear proovedores 
-CREATE TABLE lacanoa.supplierCategories (
-    CategoryID INT AUTO_INCREMENT PRIMARY KEY, -- Identificador único de la categoría
-    Name VARCHAR(100) NOT NULL UNIQUE,         -- Nombre de la categoría
-    Description TEXT                           -- Descripción opcional de la categoría
-);
-
-CREATE TABLE lacanoa.suppliers (
-    SupplierID BIGINT AUTO_INCREMENT PRIMARY KEY, -- Identificador único del proveedor
-    Name VARCHAR(255) NOT NULL,                -- Nombre del proveedor o empresa
-    Contact VARCHAR(255),                      -- Nombre de la persona de contacto
-    Phone VARCHAR(20),                         -- Número de teléfono
-    Email VARCHAR(255),                        -- Dirección de correo electrónico
-    Address TEXT,                              -- Dirección física
-    City VARCHAR(100),                         -- Ciudad
-    State VARCHAR(100),                        -- Estado o provincia
-    PostalCode VARCHAR(20),                    -- Código postal
-    Country VARCHAR(100) DEFAULT 'Mexico',     -- País (por defecto, México)
-    CategoryID INT NOT NULL,                   -- Categoría del proveedor (FK de SupplierCategories)
-    IdentificationTypeID BIGINT NOT NULL,      -- Tipo de documento (FK de identificationType)
-    DocumentNumber VARCHAR(50) NOT NULL,       -- Número de documento del proveedor
-    CreatedBy BIGINT ,                         -- User who created the client (FK to lacanoa.users)
-    RegistrationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Fecha de registro
-    LastUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Fecha de última actualización
-    IsActive BOOLEAN DEFAULT TRUE,             -- Estado activo/inactivo
-    FOREIGN KEY (CategoryID) REFERENCES supplierCategories(CategoryID), -- Relación con SupplierCategories
-    FOREIGN KEY (IdentificationTypeID) REFERENCES identificationType(id), -- Relación con identificationType
-    FOREIGN KEY (CreatedBy) REFERENCES lacanoa.users(id) -- Relationship with lacanoa.users
-
-);
-
---- Clientes 
-
-CREATE TABLE lacanoa.personTypes (
-    PersonTypeID INT AUTO_INCREMENT PRIMARY KEY, -- Identificador único del tipo de persona
-    Name VARCHAR(50) NOT NULL UNIQUE            -- Nombre del tipo de persona (Natural o Juridical)
-);
-
-
-CREATE TABLE lacanoa.clients (
-    ClientID INT AUTO_INCREMENT PRIMARY KEY,           -- Unique identifier for the client
-    FirstName VARCHAR(100),                            -- Client's first name
-    LastName VARCHAR(100),                             -- Client's last name
-    IdentificationTypeID BIGINT NOT NULL,              -- Foreign key to IdentificationType table
-    DocumentNumber VARCHAR(50) NOT NULL UNIQUE,        -- Document number
-    VerificationDigit CHAR(1),                         -- Verification digit for the document
-    Address TEXT,                                      -- Client's address
-    City VARCHAR(100),                         		   -- Ciudad 
-    Email VARCHAR(255),                                -- Client's email address
-    Phone VARCHAR(20),                                 -- Client's phone number
-    PersonTypeID INT NOT NULL,                         -- Foreign key to PersonTypes table
-    IsTaxWithholder BOOLEAN DEFAULT FALSE,             -- Indicates if the client is a tax withholder
-    CreatedBy BIGINT ,                         -- User who created the client (FK to lacanoa.users)
-    RegistrationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Registration date
-    LastUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Last updated date
-    FOREIGN KEY (IdentificationTypeID) REFERENCES lacanoa.identificationType(id), -- Relationship with IdentificationType
-    FOREIGN KEY (PersonTypeID) REFERENCES lacanoa.personTypes(PersonTypeID), -- Relationship with PersonTypes
-    FOREIGN KEY (CreatedBy) REFERENCES lacanoa.users(id) -- Relationship with lacanoa.users
+    CONSTRAINT fk_invoice_order FOREIGN KEY (order_id) REFERENCES orders(id),
+    CONSTRAINT fk_invoice_payment_method FOREIGN KEY (payment_method_id) REFERENCES payment_method(id),
+    CONSTRAINT fk_invoice_client FOREIGN KEY (client_id) REFERENCES lacanoa.clients(clientID)
 );
