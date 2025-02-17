@@ -54,3 +54,14 @@ INSERT INTO lacanoa.supplierCategories (Name, Description) VALUES
 --
 insert into lacanoa.users(identification_type_id,identification, first_name, last_name, email, password, birth_date, phone, address, age, role_id, is_active, created_by, created_at, updated_at)
 values(1,1057597,'Jonh','Nino','jonh.nino@example.com','dsf234',current_timestamp,'3112251244','address',29,1,true,null,current_timestamp,null);
+
+INSERT INTO lacanoa.expense_categories 
+(categoryName, description, isActive) 
+VALUES 
+('Insumos de cocina', 'Gastos relacionados con ingredientes y materiales de cocina', true),
+('Bebidas', 'Gastos relacionados con bebidas alcohólicas y no alcohólicas', true),
+('Productos de limpieza', 'Gastos en productos de limpieza y mantenimiento general', true),
+('Mantenimiento', 'Gastos de mantenimiento de equipos e instalaciones', true),
+('Servicios públicos', 'Gastos en servicios como agua, luz, gas, internet, etc.', true),
+('Nómina', 'Gastos relacionados con sueldos y salarios del personal', true),
+('Utencilios', 'Gastos relacionados con herramientas para operacion', true);

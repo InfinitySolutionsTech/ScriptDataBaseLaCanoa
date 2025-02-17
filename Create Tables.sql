@@ -173,3 +173,30 @@ CREATE TABLE lacanoa.invoice (
     CONSTRAINT fk_invoice_payment_method FOREIGN KEY (payment_method_id) REFERENCES payment_method(id),
     CONSTRAINT fk_invoice_client FOREIGN KEY (client_id) REFERENCES lacanoa.clients(clientID)
 );
+-- Gastos
+-- Tabla complementaria para categorías de gastos
+CREATE TABLE lacanoa.expense_categories (
+    categoryID INT AUTO_INCREMENT PRIMARY KEY,
+    categoryName VARCHAR(100) NOT NULL,
+    description TEXT,
+    isActive BOOLEAN DEFAULT TRUE,
+    createdDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE lacanoa.expenses (
+    expenseID BIGINT AUTO_INCREMENT PRIMARY KEY, -- Identificador único del gasto
+    supplierID bigint NULL, -- Relación con el proveedor (puede ser NULL si no está asociado a un proveedor)
+    expenseDate DATE NOT NULL, -- Fecha del gasto
+    description TEXT NOT NULL, -- Descripción detallada del gasto
+    amount DECIMAL(10,2) NOT NULL, -- Monto del gasto
+    payment_method_id BIGINT NOT NULL, -- Método de pago relacionado con payment_method
+    expense_category_id INT NOT NULL, -- Categoría del gasto
+    invoiceNumber VARCHAR(50), -- Número de factura si existe
+    created_by BIGINT NOT NULL, -- Usuario que registró el gasto (relacionado con users)
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Fecha de registro
+    updated_at DATETIME, -- Última actualización
+    is_active BOOLEAN DEFAULT TRUE, -- Estado del registro
+    FOREIGN KEY (supplierID) REFERENCES lacanoa.suppliers(supplierID),
+    FOREIGN KEY (created_by) REFERENCES lacanoa.users(id),
+    FOREIGN KEY (payment_method_id) REFERENCES lacanoa.payment_method(id),
+    FOREIGN KEY (expense_category_id) REFERENCES lacanoa.expense_categories(categoryID)
+);
