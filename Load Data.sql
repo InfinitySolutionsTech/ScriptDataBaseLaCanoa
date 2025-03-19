@@ -8,14 +8,14 @@ INSERT INTO lacanoa.identificationType (name) VALUES
 -- Insert possible roles into Catalogs table
 INSERT INTO lacanoa.catalogs (role) VALUES ('administrador'), ('mesero'), ('cajero'), ('superadmin');
 -- 2. Insertar registros en TipoProducto
-INSERT INTO lacanoa.product_type (name) 
-VALUES 
-    ('Entradas'),
-    ('Fuertes'),
-    ('Jugos Naturales'),
-    ('Bebidas'),
-    ('Vinos'),
-    ('Cremas');
+INSERT INTO lacanoa.product_type (name, parent_id, color_hex)
+VALUES
+('Entradas', 1, '#FF5733'),
+('Fuertes', 2, '#33FF57'),
+('Jugos Naturales', 3, '#3357FF'),
+('Bebidas', 4, '#F3FF33'),
+('Vinos', 5, '#FF33F6'),
+('Cremas', 6, '#33FFF6');
 -- Insertar los registros de las mesas
 INSERT INTO lacanoa.tables (name) 
 VALUES 
