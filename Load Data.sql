@@ -65,3 +65,9 @@ VALUES
 ('Servicios públicos', 'Gastos en servicios como agua, luz, gas, internet, etc.', true),
 ('Nómina', 'Gastos relacionados con sueldos y salarios del personal', true),
 ('Utencilios', 'Gastos relacionados con herramientas para operacion', true);
+
+INSERT INTO notification_type (name, description, is_active)
+VALUES ("Informativa", "mensaje informativo para la app", true),
+("Alerta", "mensaje de alerta para la app", true),
+("Recordatorio", "mensaje de recordatorio para la app", true),
+("Promoción", "mensaje de promoción para la app", true);

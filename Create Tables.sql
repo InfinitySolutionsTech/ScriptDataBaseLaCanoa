@@ -229,3 +229,25 @@ CREATE TABLE lacanoa.expenses (
     FOREIGN KEY (expense_category_id) REFERENCES lacanoa.expense_categories(categoryID)
 );
 
+CREATE TABLE lacanoa.notification_type(
+	notification_type_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  description VARCHAR(200) NOT NULL,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+CREATE TABLE lacanoa.notification_history(
+	notification_history_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_send INT NOT NULL,
+  message TEXT NOT NULL,
+  message_title VARCHAR(200) NOT NULL,
+  creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  type INT NOT NULL
+);
+
+CREATE TABLE lacanoa.notification_user(
+	notification_user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  notification_history_id BIGINT NOT NULL,
+  user_id BIGINT,
+  is_for_all_users NOT NULL BOOLEAN
+);
