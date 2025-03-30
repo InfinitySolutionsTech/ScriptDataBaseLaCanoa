@@ -152,7 +152,7 @@ CREATE TABLE lacanoa.personTypes (
     name VARCHAR(50) NOT NULL UNIQUE            -- Nombre del tipo de persona (Natural o Juridical)
 );
 CREATE TABLE lacanoa.clients (
-    clientID INT AUTO_INCREMENT PRIMARY KEY,
+    clientID BIGINT  AUTO_INCREMENT PRIMARY KEY,
     firstName VARCHAR(100),
     lastName VARCHAR(100),
     identificationTypeID BIGINT NOT NULL,
@@ -179,11 +179,13 @@ CREATE TABLE lacanoa.clients (
     FOREIGN KEY (createdBy) REFERENCES lacanoa.users(id)
 );
 
+
+
 -- Create Invoice table
 CREATE TABLE lacanoa.invoice (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     order_id BIGINT NOT NULL,
-    client_id INT,
+    client_id BIGINT,
     total DECIMAL(10, 2) NOT NULL,
     amount_delivered DECIMAL(10, 2) NOT NULL,
     changes DECIMAL(10, 2) NOT NULL,
@@ -249,5 +251,5 @@ CREATE TABLE lacanoa.notification_user(
 	notification_user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
   notification_history_id BIGINT NOT NULL,
   user_id BIGINT,
-  is_for_all_users NOT NULL BOOLEAN
+  is_for_all_users BOOLEAN NOT NULL 
 );
