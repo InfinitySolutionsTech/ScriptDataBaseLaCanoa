@@ -148,7 +148,7 @@ CREATE TABLE lacanoa.suppliers (
 
 -- Clientes 
 CREATE TABLE lacanoa.personTypes (
-    personTypeID INT AUTO_INCREMENT PRIMARY KEY, -- Identificador único del tipo de persona
+    personTypeID BIGINT AUTO_INCREMENT PRIMARY KEY, -- Identificador único del tipo de persona
     name VARCHAR(50) NOT NULL UNIQUE            -- Nombre del tipo de persona (Natural o Juridical)
 );
 CREATE TABLE lacanoa.clients (
@@ -168,7 +168,7 @@ CREATE TABLE lacanoa.clients (
 
     email VARCHAR(255),
     phone VARCHAR(20),
-    personTypeID INT NOT NULL,
+    personTypeID BIGINT NOT NULL,
     isTaxWithholder BOOLEAN DEFAULT FALSE,
     createdBy BIGINT,
     registrationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
