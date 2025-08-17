@@ -52,8 +52,8 @@ INSERT INTO lacanoa.supplierCategories (Name, Description) VALUES
 ('Bebidas', 'Proveedores de bebidas, incluyendo opciones alcohólicas y no alcohólicas.'),
 ('Utensilios', 'Proveedores de utensilios de cocina y accesorios para restaurantes.');
 --
-insert into lacanoa.users(identification_type_id,identification, first_name, last_name, email, password, birth_date, phone, address, age, role_id, is_active, created_by, created_at, updated_at)
-values(1,1057597,'Jonh','Nino','jonh.nino@example.com','dsf234',current_timestamp,'3112251244','address',29,1,true,null,current_timestamp,null);
+insert into lacanoa.users(identification_type_id,identification, first_name, last_name, email, password, birth_date, phone_country_code, phone, address, age, role_id, is_active, created_by, created_at, updated_at)
+values(1,1057597,'Jonh','Nino','jonh.nino@example.com','dsf234',current_timestamp,'+57','3112251244','address',29,1,true,null,current_timestamp,null);
 
 INSERT INTO lacanoa.expense_categories 
 (categoryName, description, isActive) 

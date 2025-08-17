@@ -1,16 +1,19 @@
--- SQL Schema
-CREATE SCHEMA lacanoa;
+-- 1. Crear la base de datos y seleccionarla
+CREATE DATABASE IF NOT EXISTS lacanoa
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+USE lacanoa;
 -- Create Catalogs table (possible roles)
-CREATE TABLE lacanoa.catalogs (
+CREATE TABLE catalogs (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     role VARCHAR(50) NOT NULL UNIQUE
 );
 -- Create IdentificationType table
-CREATE TABLE lacanoa.identificationType (
+CREATE TABLE identificationType (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
-CREATE TABLE lacanoa.users (
+CREATE TABLE users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     identification_type_id BIGINT NOT NULL,
     identification VARCHAR(50) UNIQUE NOT NULL,
@@ -19,6 +22,7 @@ CREATE TABLE lacanoa.users (
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     birth_date DATE,
+    phone_country_code VARCHAR(5),
     phone VARCHAR(20),
 
     -- Campos estandarizados en inglés
@@ -44,7 +48,7 @@ CREATE TABLE lacanoa.users (
 );
 
 -- Create ProductType table
-CREATE TABLE lacanoa.product_type (
+CREATE TABLE product_type (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
     parent_id BIGINT,
@@ -53,7 +57,7 @@ CREATE TABLE lacanoa.product_type (
 
 
 -- Create Product table
-CREATE TABLE lacanoa.product (
+CREATE TABLE product (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     type_id BIGINT NOT NULL,
@@ -67,17 +71,17 @@ CREATE TABLE lacanoa.product (
         REFERENCES product_type(id)
 );
 -- Create Tables table (restaurant tables)
-CREATE TABLE lacanoa.tables (
+CREATE TABLE tables (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL
 );
 -- Create PaymentMethod table
-CREATE TABLE lacanoa.payment_method (
+CREATE TABLE payment_method (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL
 );
 -- Create Orders table
-CREATE TABLE lacanoa.orders (
+CREATE TABLE orders (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     table_id BIGINT NOT NULL,
@@ -91,7 +95,7 @@ CREATE TABLE lacanoa.orders (
         REFERENCES tables(id)
 );
 -- Create OrderDetails table
-CREATE TABLE lacanoa.order_details (
+CREATE TABLE order_details (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     order_id BIGINT NOT NULL,
     product_id BIGINT NOT NULL,
@@ -104,7 +108,7 @@ CREATE TABLE lacanoa.order_details (
         REFERENCES product(id)
 );
  -- Create the reports table
-CREATE TABLE lacanoa.reports (
+CREATE TABLE reports (
     id SERIAL PRIMARY KEY,
     report_name VARCHAR(100) NOT NULL,
     report_type VARCHAR(50) NOT NULL,
@@ -113,15 +117,16 @@ CREATE TABLE lacanoa.reports (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 -- informacion para crear proovedores 
-CREATE TABLE lacanoa.supplierCategories (
+CREATE TABLE supplierCategories (
     categoryID INT AUTO_INCREMENT PRIMARY KEY, -- Identificador único de la categoría
     name VARCHAR(100) NOT NULL UNIQUE,         -- Nombre de la categoría
     description TEXT                           -- Descripción opcional de la categoría
 );
-CREATE TABLE lacanoa.suppliers (
+CREATE TABLE suppliers (
     supplierID BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     contact VARCHAR(255),
+    phone_country_code VARCHAR(5),
     phone VARCHAR(20),
     email VARCHAR(255),
 
@@ -143,15 +148,15 @@ CREATE TABLE lacanoa.suppliers (
 
     FOREIGN KEY (categoryID) REFERENCES supplierCategories(categoryID),
     FOREIGN KEY (identificationTypeID) REFERENCES identificationType(id),
-    FOREIGN KEY (createdBy) REFERENCES lacanoa.users(id)
+    FOREIGN KEY (createdBy) REFERENCES users(id)
 );
 
 -- Clientes 
-CREATE TABLE lacanoa.personTypes (
+CREATE TABLE personTypes (
     personTypeID BIGINT AUTO_INCREMENT PRIMARY KEY, -- Identificador único del tipo de persona
     name VARCHAR(50) NOT NULL UNIQUE            -- Nombre del tipo de persona (Natural o Juridical)
 );
-CREATE TABLE lacanoa.clients (
+CREATE TABLE clients (
     clientID BIGINT  AUTO_INCREMENT PRIMARY KEY,
     firstName VARCHAR(100),
     lastName VARCHAR(100),
@@ -167,6 +172,7 @@ CREATE TABLE lacanoa.clients (
     neighborhood VARCHAR(100),
 
     email VARCHAR(255),
+    phone_country_code VARCHAR(5),
     phone VARCHAR(20),
     personTypeID BIGINT NOT NULL,
     isTaxWithholder BOOLEAN DEFAULT FALSE,
@@ -174,15 +180,15 @@ CREATE TABLE lacanoa.clients (
     registrationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     lastUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (identificationTypeID) REFERENCES lacanoa.identificationType(id),
-    FOREIGN KEY (personTypeID) REFERENCES lacanoa.personTypes(PersonTypeID),
-    FOREIGN KEY (createdBy) REFERENCES lacanoa.users(id)
+    FOREIGN KEY (identificationTypeID) REFERENCES identificationType(id),
+    FOREIGN KEY (personTypeID) REFERENCES personTypes(PersonTypeID),
+    FOREIGN KEY (createdBy) REFERENCES users(id)
 );
 
 
 
 -- Create Invoice table
-CREATE TABLE lacanoa.invoice (
+CREATE TABLE invoice (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     order_id BIGINT NOT NULL,
     client_id BIGINT,
@@ -201,18 +207,18 @@ CREATE TABLE lacanoa.invoice (
     
     CONSTRAINT fk_invoice_order FOREIGN KEY (order_id) REFERENCES orders(id),
     CONSTRAINT fk_invoice_payment_method FOREIGN KEY (payment_method_id) REFERENCES payment_method(id),
-    CONSTRAINT fk_invoice_client FOREIGN KEY (client_id) REFERENCES lacanoa.clients(clientID)
+    CONSTRAINT fk_invoice_client FOREIGN KEY (client_id) REFERENCES clients(clientID)
 );
 -- Gastos
 -- Tabla complementaria para categorías de gastos
-CREATE TABLE lacanoa.expense_categories (
+CREATE TABLE expense_categories (
     categoryID INT AUTO_INCREMENT PRIMARY KEY,
     categoryName VARCHAR(100) NOT NULL,
     description TEXT,
     isActive BOOLEAN DEFAULT TRUE,
     createdDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-CREATE TABLE lacanoa.expenses (
+CREATE TABLE expenses (
     expenseID BIGINT AUTO_INCREMENT PRIMARY KEY, -- Identificador único del gasto
     supplierID bigint NULL, -- Relación con el proveedor (puede ser NULL si no está asociado a un proveedor)
     expenseDate DATE NOT NULL, -- Fecha del gasto
@@ -225,20 +231,20 @@ CREATE TABLE lacanoa.expenses (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Fecha de registro
     updated_at DATETIME, -- Última actualización
     is_active BOOLEAN DEFAULT TRUE, -- Estado del registro
-    FOREIGN KEY (supplierID) REFERENCES lacanoa.suppliers(supplierID),
-    FOREIGN KEY (created_by) REFERENCES lacanoa.users(id),
-    FOREIGN KEY (payment_method_id) REFERENCES lacanoa.payment_method(id),
-    FOREIGN KEY (expense_category_id) REFERENCES lacanoa.expense_categories(categoryID)
+    FOREIGN KEY (supplierID) REFERENCES suppliers(supplierID),
+    FOREIGN KEY (created_by) REFERENCES users(id),
+    FOREIGN KEY (payment_method_id) REFERENCES payment_method(id),
+    FOREIGN KEY (expense_category_id) REFERENCES expense_categories(categoryID)
 );
 
-CREATE TABLE lacanoa.notification_type(
+CREATE TABLE notification_type(
 	notification_type_id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   description VARCHAR(200) NOT NULL,
   is_active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
-CREATE TABLE lacanoa.notification_history(
+CREATE TABLE notification_history(
 	notification_history_id BIGINT AUTO_INCREMENT PRIMARY KEY,
   user_send INT NOT NULL,
   message TEXT NOT NULL,
@@ -247,7 +253,7 @@ CREATE TABLE lacanoa.notification_history(
   type INT NOT NULL
 );
 
-CREATE TABLE lacanoa.notification_user(
+CREATE TABLE notification_user(
 	notification_user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
   notification_history_id BIGINT NOT NULL,
   user_id BIGINT,
