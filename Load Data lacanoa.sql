@@ -71,3 +71,30 @@ VALUES ("Informativa", "mensaje informativo para la app", true),
 ("Alerta", "mensaje de alerta para la app", true),
 ("Recordatorio", "mensaje de recordatorio para la app", true),
 ("Promoción", "mensaje de promoción para la app", true);
+
+
+
+-- ===============================
+-- Estados de incidencia
+-- ===============================
+INSERT INTO incident_statuses (name, description) VALUES
+('Abierto', 'Incidencia recién creada y pendiente de asignación'),
+('Asignado', 'Incidencia asignada a un técnico pero sin iniciar trabajo'),
+('En Proceso', 'Incidencia en proceso de resolución'),
+('Solucionado', 'Incidencia resuelta y cerrada');
+
+-- ===============================
+-- Niveles de severidad de incidencia
+-- ===============================
+INSERT INTO incident_severities (level, details) VALUES
+('Baja', 'Impacto menor o sin afectación crítica'),
+('Media', 'Impacto intermedio, requiere atención pronta'),
+('Alta', 'Impacto alto o crítico, requiere atención inmediata');
+
+-- ===============================
+-- Categorías de incidencia (ejemplos)
+-- ===============================
+INSERT INTO incident_categories (name, description) VALUES
+('Bug', 'Error de funcionamiento o defectos en el sistema'),
+('Mejora', 'Solicitudes para mejorar funcionalidades existentes'),
+('Consulta', 'Dudas, requerimientos o preguntas del cliente');

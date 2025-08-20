@@ -259,3 +259,33 @@ CREATE TABLE notification_user(
   user_id BIGINT,
   is_for_all_users BOOLEAN NOT NULL 
 );
+
+
+-- -------------------------------------------------------------
+-- Catálogo: Categorías de Incidencia
+-- -------------------------------------------------------------
+CREATE TABLE incident_categories (
+  category_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  description TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- -------------------------------------------------------------
+-- Catálogo: Niveles de Severidad de Incidencia
+-- -------------------------------------------------------------
+CREATE TABLE incident_severities (
+  severity_id INT AUTO_INCREMENT PRIMARY KEY,
+  level VARCHAR(50) NOT NULL,
+  details TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- -------------------------------------------------------------
+-- Catálogo: Estados de Incidencia
+-- -------------------------------------------------------------
+CREATE TABLE incident_statuses (
+  status_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  description TEXT,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uk_incident_status_name (name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
