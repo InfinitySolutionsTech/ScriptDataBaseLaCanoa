@@ -289,3 +289,19 @@ CREATE TABLE incident_statuses (
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY uk_incident_status_name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- -------------------------------------------------------------
+-- Información del negocio
+-- -------------------------------------------------------------
+CREATE TABLE business_info (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+  	street VARCHAR(200) NOT NULL,
+  	email VARCHAR(100),
+  	phone VARCHAR(20) NOT NULL,
+  	nit VARCHAR(20) NOT NULL,
+  	city VARCHAR(50) NOT NULL,
+  	country VARCHAR(50) NOT NULL,
+  	state VARCHAR(50) NOT NULL,
+  	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
