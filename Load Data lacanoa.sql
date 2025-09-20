@@ -98,11 +98,3 @@ INSERT INTO incident_categories (name, description) VALUES
 ('Bug', 'Error de funcionamiento o defectos en el sistema'),
 ('Mejora', 'Solicitudes para mejorar funcionalidades existentes'),
 ('Consulta', 'Dudas, requerimientos o preguntas del cliente');
-
--- -------------------------------------------------------------
--- Insertar datos iniciales para order_status
--- -------------------------------------------------------------
-INSERT INTO order_status (name, description) VALUES
-('Pendiente', 'Orden creada pero no entregada al cliente'),
-('Entregado sin pagar', 'Orden entregada al cliente pero no pagada'),
-('Pagado', 'Orden pagada completamente');
