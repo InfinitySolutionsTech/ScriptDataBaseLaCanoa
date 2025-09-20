@@ -80,19 +80,29 @@ CREATE TABLE payment_method (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL
 );
+
+-- Create OrderStatus table (catalog for order states)
+CREATE TABLE order_status (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    description VARCHAR(255)
+);
+
 -- Create Orders table
 CREATE TABLE orders (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     table_id BIGINT NOT NULL,
-    paid BOOLEAN NOT NULL DEFAULT false,
+    status_id BIGINT NOT NULL DEFAULT 1,
     creation_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     update_date DATETIME,
-    
-    CONSTRAINT fk_order_user FOREIGN KEY (user_id) 
+
+    CONSTRAINT fk_order_user FOREIGN KEY (user_id)
         REFERENCES users(id),
-    CONSTRAINT fk_order_table FOREIGN KEY (table_id) 
-        REFERENCES tables(id)
+    CONSTRAINT fk_order_table FOREIGN KEY (table_id)
+        REFERENCES tables(id),
+    CONSTRAINT fk_order_status FOREIGN KEY (status_id)
+        REFERENCES order_status(id)
 );
 -- Create OrderDetails table
 CREATE TABLE order_details (
@@ -305,3 +315,4 @@ CREATE TABLE business_info (
   	state VARCHAR(50) NOT NULL,
   	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
