@@ -98,3 +98,15 @@ INSERT INTO incident_categories (name, description) VALUES
 ('Bug', 'Error de funcionamiento o defectos en el sistema'),
 ('Mejora', 'Solicitudes para mejorar funcionalidades existentes'),
 ('Consulta', 'Dudas, requerimientos o preguntas del cliente');
+
+
+
+-- -------------------------------------------------------------
+-- Insertar datos iniciales en catálogo de estados de órdenes
+-- -------------------------------------------------------------
+INSERT INTO status_order_catalog(name, description)
+VALUES('CREATED', 'Order has been created'),
+('IN PROCESS', 'Order processing'),
+('DELIVERED', 'Order delivered'),
+('CANCELED', 'Order Canceled'),
+('PAID', 'Order Successfull payed');
