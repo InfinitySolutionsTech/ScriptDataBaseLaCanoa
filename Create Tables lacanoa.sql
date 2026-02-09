@@ -1,8 +1,8 @@
 -- 1. Crear la base de datos y seleccionarla
-CREATE DATABASE IF NOT EXISTS lacanoa
+CREATE DATABASE IF NOT EXISTS lasburgues
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
-USE lacanoa;
+USE lasburgues;
 -- Create Catalogs table (possible roles)
 CREATE TABLE catalogs (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -221,7 +221,6 @@ CREATE TABLE delivery (
     updated_at DATETIME,
 
     CONSTRAINT fk_delivery_user FOREIGN KEY (user_id) REFERENCES users(id),
-    CONSTRAINT fk_delivery_client FOREIGN KEY (client_id) REFERENCES clients(clientID),
     CONSTRAINT fk_delivery_status FOREIGN KEY (status)
         REFERENCES status_order_catalog(id)
         ON DELETE RESTRICT
@@ -229,7 +228,6 @@ CREATE TABLE delivery (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE INDEX idx_delivery_user_id ON delivery(user_id);
-CREATE INDEX idx_delivery_client_id ON delivery(client_id);
 CREATE INDEX idx_delivery_status ON delivery(status);
 
 
