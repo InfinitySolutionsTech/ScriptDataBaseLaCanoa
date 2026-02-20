@@ -39,9 +39,11 @@ VALUES
 -- Insert the report types
 INSERT INTO lacanoa.reports (report_name, report_type, is_active) VALUES
     ('Reporte General', 'CSV', true),
-    ('Reporte Facturación Electrónica', 'CSV', true),
+    ('Reporte Rendimiento productos', 'CSV', true),
+    ('Reporte Gastos', 'CSV', true),
     ('Reporte General', 'PDF', true),
-    ('Reporte Facturación Electrónica', 'PDF', true);
+    ('Reporte Rendimiento productos', 'PDF', true),
+    ('Reporte Gastos', 'PDF', true);
 -- data Clients 
 INSERT INTO lacanoa.personTypes (Name) VALUES
 ('Natural'),
