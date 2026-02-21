@@ -1,3 +1,9 @@
+-- -------------------------------------------------------------
+-- Información del negocio
+-- -------------------------------------------------------------
+INSERT INTO lacanoa.business_info (id, name, street, email, phone, nit, city, country, state, created_at)
+VALUES (1, 'lacanoa', 'calle 1', 'lacanoa@example.com', '34522435245', '23452353425', 'Sogamoso', 'Colombia', 'boayaca', '2026-02-21 01:51:59');
+
 -- Insert default values
 INSERT INTO lacanoa.identificationType (name) VALUES
 ('CC'),           -- Citizen ID
@@ -112,3 +118,5 @@ VALUES('CREATED', 'Order has been created'),
 ('DELIVERED', 'Order delivered'),
 ('CANCELED', 'Order Canceled'),
 ('PAID', 'Order Successfull payed');
+
+
